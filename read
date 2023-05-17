@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+
+// Function to display prompt
+void display_prompt(void)
+{
+    printf("$ ");
+}
+
+// Signal handler for SIGINT
+void handle_signal(int signo)
+{
+    printf("\n");
+    display_prompt();
+    fflush(stdout);
+}
+
+// Function to handle end of file error
+void handle_eof(char *input_buffer)
+{
+    free(input_buffer);
+    printf("\n");
+    exit(EXIT_SUCCESS);
+}
+
+// Function to count the number of characters in a string
+size_t get_string_length(char *str)
+{
+    size_t len = 0;
+    while (*str++)
+        len++;
+    return len;
+}
+
+// Function to tokenize a string into individual words
+char **get_tokens(char *input_string, char *delimiter)
+{
+    char **tokens = NULL;
+    char *token = strtok(input_string, delimiter);
+    int i = 0;
+
+    while (token != NULL)
+    {
+        tokens = realloc(tokens, sizeof(char *) * (i + 1));
+        tokens[i] = token;
+        i++;
+
+        token = strtok(NULL, delimiter);
+    }
+    tokens = realloc(tokens, sizeof(char *) * (i + 1));
+    tokens[i] = NULL;
+    return tokens;
+}
+
+// Function to execute the "exit" command
+void run_exit_command(char **command_array)
+{
+    int status = 0;
+
+    if (command_array[1] != NULL)
+        status = atoi(command_array[1]);
+
+    exit(status);
+}
+
+// Function to change the current working directory
+void change_directory(char *path)
+{
+    if (chdir(path) != 0)
+        perror("Error changing directory");
+}
+
+// Function to create a child process and execute a command
+void execute_command(char **command_array, char *program_name, char **envp, int count)
+{
+    pid_t pid = fork();
+    if (pid == -1)
+    {
+        perror("Error creating child process");
+        return;
+    }
+    else if (pid == 0)
+    {
+        execve(command_array[0], command_array, envp);
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        int status;
+        wait(&status);
+        printf("[%d] %d\n", count, status);
+    }
+}
+
+// Main function
+int main(int argument_count, char **argument_values, char **environment_variables)
+{
+    char *input_buffer = NULL, **command_array = NULL; // Initialize variables
+    size_t buffer_size = 0;
+    ssize_t chars_readed = 0;
+    int cycle_count = 0;
+    (void)argument_count; // Unused variable
+
+    while (1) // Enter infinite loop
+    {
+        cycle_count++; // Increase count of cycles
+        display_prompt(); // Display prompt
+        signal(SIGINT, handle_signal); // Set signal handler for SIGINT
+        chars_readed = getline(&input_buffer, &buffer_size, stdin); // Read line of text from standard input
+        
+        if (chars_readed == EOF) // Handle end of file error
+            handle_eof(input_buffer);
+        else if (*input_buffer == '\n') // Free buffer if first character is newline character
+            free(input_buffer);
+        else // Otherwise parse the command
+        {
+            input_buffer[get_string_length(input_buffer) - 1] = '\0'; // Replace last character of buffer with null character
+            command_array = get_tokens(input_buffer, " \0"); // Tokenize buffer into individual words
+            free(input_buffer); // Free buffer
+            if (strcmp(command_array[0], "exit") == 0) // If first word is "exit"
+                run_exit_command(command_array); // Execute "exit" command
+            else if (strcmp(command_array[0], "cd") == 0) // If first word is "cd"
+                change_directory(command_array[1]); // Change working directory
+            else // Otherwise create a child process and execute command
+                execute_command(command_array, argument_values[0], environment_variables, cycle_count);
+        }
+        
+        fflush(stdin); // Flush standard input
+        input_buffer = NULL, buffer_size = 0; // Reset buffer and buffer_size
+    }
+    
+    if (chars_readed == -1) // Check for getline() error
+        return (EXIT_FAILURE);
+    return (EXIT_SUCCESS);
+}
