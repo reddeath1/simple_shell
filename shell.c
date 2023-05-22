@@ -21,3 +21,43 @@ int main(int argc, char **a, char **env)
                 prompter();
         }
 }
+
+/**
+ * prompter - funtion to display prompts
+ * Return: always null
+ */
+void prompter()
+{
+	printf("Shell> ");
+	fflush(stdout);
+}
+
+
+/**
+ * exec - function to execute the commands
+ * @command: arg command to execute
+ * @program: program to run
+ */
+void exec(char *command, char *program) 
+{
+	pid_t pid = fork();
+
+	if (pid < 0) 
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}else if (pid == 0)
+	{
+		if (execlp(command, command, NULL) == -1) 
+		{
+			fprintf(stderr, "%s: 1: %s: not found\n", programName, command);
+			exit(EXIT_FAILURE);
+		}
+	} else 
+	{
+	       	int status;
+		waitpid(pid, &status, 0);
+	}
+}
+
+

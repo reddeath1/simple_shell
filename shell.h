@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 
+#define MAX_INPUT_SIZE 1024
 
 int main(int ac, char **av, char **env);
 void prompter();
