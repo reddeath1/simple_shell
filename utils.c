@@ -1,4 +1,9 @@
 #include "shell.h"
+/**
+ * s_atoi - Convert string to integer
+ * @str: String to convert
+ * Return: Converted integer value
+ */
 
 int s_atoi(char *str)
 {
@@ -28,6 +33,11 @@ int s_atoi(char *str)
         return result * sign;
 }
 
+/**
+ * s_strlen - Calculate the length of a string
+ * @str: Input string
+ * Return: Length of the string
+ */
 size_t s_strlen(const char *str)
 {
         const char *s = str;
@@ -36,6 +46,12 @@ size_t s_strlen(const char *str)
         return s - str;
 }
 
+/**
+ * _getline - Read a line of input from stdin
+ * @lineptr: Pointer to store the allocated line
+ * @n: Pointer to store the allocated size
+ * Return: Number of bytes read or -1 on failure
+ */
 ssize_t _getline(char **lineptr, size_t *n)
 {
 
@@ -53,17 +69,14 @@ ssize_t _getline(char **lineptr, size_t *n)
         return -1;
     }
 
-    // Read characters until newline or end of file is encountered
     while ((c = getchar()) != '\n' && c != EOF)
     {
-        // Reallocate buffer if necessary
         if (read_bytes >= (ssize_t)buffer_size)
         {
-            new_size = buffer_size + 1; // Increase buffer size by 1
+            new_size = buffer_size + 1;
             new_buffer = realloc(buffer, new_size);
             if (new_buffer == NULL)
             {
-                // Error occurred while reallocating memory
                 free(buffer);
                 return -1;
             }
@@ -71,54 +84,50 @@ ssize_t _getline(char **lineptr, size_t *n)
             buffer_size = new_size;
         }
 
-        // Store the character in the buffer
         buffer[read_bytes++] = c;
     }
 
-    // Allocate memory for the line
     if (read_bytes > 0)
     {
-        line = malloc(read_bytes + 1); // Add space for null terminator
+        line = malloc(read_bytes + 1);
         if (line == NULL)
         {
-            // Error occurred while allocating memory
             free(buffer);
             return -1;
         }
-        // Copy the characters from the buffer to the line
+       
         for (; i < read_bytes; i++)
         {
             line[i] = buffer[i];
         }
-        line[read_bytes] = '\0'; // Null-terminate the line
+        line[read_bytes] = '\0'; 
         *lineptr = line;
     }
     else
     {
-        *lineptr = NULL; // No characters read, set lineptr to NULL
+        *lineptr = NULL; 
     }
 
-    // Update the buffer size
     *n = buffer_size;
 
-    // Free the buffer
     free(buffer);
 
     if (c == EOF)
     {
-        // End of file is encountered
         return -1;
     }
 
     return read_bytes;
 }
 
-
+/**
+ * s_chdir - Change directory
+ * @tokens: Array of tokens
+ */
 void s_chdir(char **tokens)
 {
     if (tokens[1] == NULL || strcmp(tokens[1], "~") == 0)
     {
-        // No argument or ~ provided, change to home directory
         char *homeDir = getenv("HOME");
         if (homeDir == NULL)
         {
@@ -133,7 +142,6 @@ void s_chdir(char **tokens)
     }
     else if (strcmp(tokens[1], "-") == 0)
     {
-        // "-" provided, change to previous directory
         char *prevDir = getenv("OLDPWD");
         if (prevDir == NULL)
         {
@@ -152,7 +160,6 @@ void s_chdir(char **tokens)
     }
     else
     {
-        // Directory path provided, change to specified directory
         if (chdir(tokens[1]) != 0)
         {
             fprintf(stderr, "%s: No such file or directory\n", tokens[1]);

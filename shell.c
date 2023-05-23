@@ -1,18 +1,23 @@
 #include "shell.h"
+
 /**
  * main - Main function
- * Return: (Always 0)
+ * @argc: Number of command-line arguments
+ * @argv: Array of command-line arguments
+ * @env: Array of environment variables
+ * Return: Always 0
  */
-int main(int argc, char* argv[], char **env)
+int main(int argc, char *argv[], char **env)
 {
     char *input = NULL;
     char *tokens[MAX_TOKENS];
     int numTokens;
     size_t input_size = 0;
     ssize_t read_bytes;
-    char* executable = NULL;
+    char *executable = NULL;
 
-    if (argc > 0) {
+    if (argc > 0)
+    {
         executable = argv[0];
     }
 
@@ -24,14 +29,11 @@ int main(int argc, char* argv[], char **env)
 
         if (read_bytes == -1)
         {
-            // End of file (Ctrl+D) is encountered or error occurred
             break;
         }
 
-        // Remove newline character from the input
         input[strcspn(input, "\n")] = '\0';
 
-        // Tokenize input
         tokenizeInput(input, tokens, &numTokens);
 
         if (numTokens > 0)
@@ -46,13 +48,10 @@ int main(int argc, char* argv[], char **env)
             }
             else if (isExitCommand(tokens[0]))
             {
-                // Check for additional argument
                 if (numTokens > 1)
                 {
-                    // Convert status argument to integer
                     int status = s_atoi(tokens[1]);
 
-                    // Exit the shell with status
                     exit(status);
                 }
                 else
@@ -63,7 +62,7 @@ int main(int argc, char* argv[], char **env)
             }
             else
             {
-                executeCommand(tokens,executable);
+                executeCommand(tokens, executable);
             }
         }
         free(input);
@@ -71,14 +70,13 @@ int main(int argc, char* argv[], char **env)
         input_size = 0;
     }
 
-    // Free allocated memory for input
     free(input);
 
     return 0;
 }
 
 /**
- * prompter - funtion to display prompts
+ * prompter - function to display prompts
  * Return: always null
  */
 void prompter(void)
@@ -87,7 +85,12 @@ void prompter(void)
     fflush(stdout);
 }
 
-void executeCommand(char **tokens,char* executable)
+/**
+ * executeCommand - function to execute shell commands
+ * @tokens: array of command tokens
+ * @executable: name of the shell executable
+ */
+void executeCommand(char **tokens, char *executable)
 {
     pid_t pid = fork();
     char cwd[4096];
@@ -103,7 +106,7 @@ void executeCommand(char **tokens,char* executable)
         if (execvp(tokens[0], tokens) == -1)
         {
 
-            if (getcwd(cwd, sizeof(cwd)) != NULL) 
+            if (getcwd(cwd, sizeof(cwd)) != NULL)
             {
                 fprintf(stderr, "%s: No such file or directory\n", executable);
                 exit(1);
@@ -119,6 +122,12 @@ void executeCommand(char **tokens,char* executable)
     }
 }
 
+/**
+ * tokenizeInput - function to tokenize input string
+ * @input: input string
+ * @tokens: array to store tokens
+ * @numTokens: pointer to store the number of tokens
+ */
 void tokenizeInput(char *input, char **tokens, int *numTokens)
 {
     char *token = strtok(input, " \t\n");
@@ -133,4 +142,3 @@ void tokenizeInput(char *input, char **tokens, int *numTokens)
 
     tokens[*numTokens] = NULL;
 }
-

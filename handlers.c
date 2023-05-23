@@ -1,10 +1,18 @@
 #include "shell.h"
 
+/**
+ * isExitCommand - Check if the command is "exit"
+ * @command: Command to check
+ * Return: 1 if it is "exit", 0 otherwise
+ */
 int isExitCommand(char *command)
 {
     return strcmp(command, "exit") == 0;
 }
 
+/**
+ * displayAliases - Display all aliases
+ */
 void displayAliases(void)
 {
     int i = 0;
@@ -16,6 +24,10 @@ void displayAliases(void)
     }
 }
 
+/**
+ * displayAlias - Display a specific alias
+ * @name: Name of the alias to display
+ */
 void displayAlias(const char *name)
 {
     int i = 0;
@@ -31,6 +43,11 @@ void displayAlias(const char *name)
     }
 }
 
+/**
+ * setAlias - Set or update an alias
+ * @name: Name of the alias
+ * @value: Value of the alias
+ */
 void setAlias(const char *name, const char *value)
 {
     int i = 0;
@@ -53,6 +70,10 @@ void setAlias(const char *name, const char *value)
     }
 }
 
+/**
+ * executeAliasCommand - Execute the alias command
+ * @tokens: Array of tokens
+ */
 void executeAliasCommand(char **tokens)
 {
     int tokenIndex = 1;
