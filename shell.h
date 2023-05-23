@@ -19,8 +19,8 @@
 
 struct Alias
 {
-    char name[MAX_ALIAS_NAME_SIZE];
-    char value[MAX_ALIAS_VALUE_SIZE];
+	char name[MAX_ALIAS_NAME_SIZE];
+	char value[MAX_ALIAS_VALUE_SIZE];
 };
 
 struct Alias aliases[MAX_ALIAS_SIZE];

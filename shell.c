@@ -9,70 +9,70 @@
  */
 int main(int argc, char *argv[], char **env)
 {
-    char *input = NULL;
-    char *tokens[MAX_TOKENS];
-    int numTokens;
-    size_t input_size = 0;
-    ssize_t read_bytes;
-    char *executable = NULL;
+	char *input = NULL;
+	char *tokens[MAX_TOKENS];
+	int numTokens;
+	size_t input_size = 0;
+	ssize_t read_bytes;
+	char *executable = NULL;
 
-    if (argc > 0)
-    {
-        executable = argv[0];
-    }
+	if (argc > 0)
+	{
+		executable = argv[0];
+	}
 
-    while (1)
-    {
-        prompter();
+	while (1)
+	{
+		prompter();
 
-        read_bytes = _getline(&input, &input_size);
+		read_bytes = _getline(&input, &input_size);
 
-        if (read_bytes == -1)
-        {
-            break;
-        }
+		if (read_bytes == -1)
+		{
+			break;
+		}
 
-        input[strcspn(input, "\n")] = '\0';
+		input[strcspn(input, "\n")] = '\0';
 
-        tokenizeInput(input, tokens, &numTokens);
+		tokenizeInput(input, tokens, &numTokens);
 
-        if (numTokens > 0)
-        {
-            if (strcmp(tokens[0], "alias") == 0)
-            {
-                executeAliasCommand(tokens);
-            }
-            else if (strcmp(tokens[0], "cd") == 0)
-            {
-                s_chdir(tokens);
-            }
-            else if (isExitCommand(tokens[0]))
-            {
-                if (numTokens > 1)
-                {
-                    int status = s_atoi(tokens[1]);
+		if (numTokens > 0)
+		{
+			if (strcmp(tokens[0], "alias") == 0)
+			{
+				executeAliasCommand(tokens);
+			}
+			else if (strcmp(tokens[0], "cd") == 0)
+			{
+				s_chdir(tokens);
+			}
+			else if (isExitCommand(tokens[0]))
+			{
+				if (numTokens > 1)
+				{
+					int status = s_atoi(tokens[1]);
 
-                    exit(status);
-                }
-                else
-                {
-                    free(input);
-                    exit(EXIT_SUCCESS);
-                }
-            }
-            else
-            {
-                executeCommand(tokens, executable);
-            }
-        }
-        free(input);
-        input = NULL;
-        input_size = 0;
-    }
+					exit(status);
+				}
+				else
+				{
+					free(input);
+					exit(EXIT_SUCCESS);
+				}
+			}
+			else
+			{
+				executeCommand(tokens, executable);
+			}
+		}
+		free(input);
+		input = NULL;
+		input_size = 0;
+	}
 
-    free(input);
+	free(input);
 
-    return 0;
+	return 0;
 }
 
 /**
@@ -81,8 +81,8 @@ int main(int argc, char *argv[], char **env)
  */
 void prompter(void)
 {
-    printf("Shell> ");
-    fflush(stdout);
+	printf("Shell> ");
+	fflush(stdout);
 }
 
 /**
@@ -92,34 +92,34 @@ void prompter(void)
  */
 void executeCommand(char **tokens, char *executable)
 {
-    pid_t pid = fork();
-    char cwd[4096];
+	pid_t pid = fork();
+	char cwd[4096];
 
-    if (pid < 0)
-    {
-        fprintf(stderr, "Fork failed\n");
-        exit(1);
-    }
-    else if (pid == 0)
-    {
-        // Child process
-        if (execvp(tokens[0], tokens) == -1)
-        {
+	if (pid < 0)
+	{
+		fprintf(stderr, "Fork failed\n");
+		exit(1);
+	}
+	else if (pid == 0)
+	{
+		// Child process
+		if (execvp(tokens[0], tokens) == -1)
+		{
 
-            if (getcwd(cwd, sizeof(cwd)) != NULL)
-            {
-                fprintf(stderr, "%s: No such file or directory\n", executable);
-                exit(1);
-            }
-            fprintf(stderr, "%s: No such file or directory\n", tokens[0]);
-            exit(1);
-        }
-    }
-    else
-    {
-        // Parent process
-        wait(NULL);
-    }
+			if (getcwd(cwd, sizeof(cwd)) != NULL)
+			{
+				fprintf(stderr, "%s: No such file or directory\n", executable);
+				exit(1);
+			}
+			fprintf(stderr, "%s: No such file or directory\n", tokens[0]);
+			exit(1);
+		}
+	}
+	else
+	{
+		// Parent process
+		wait(NULL);
+	}
 }
 
 /**
@@ -130,15 +130,15 @@ void executeCommand(char **tokens, char *executable)
  */
 void tokenizeInput(char *input, char **tokens, int *numTokens)
 {
-    char *token = strtok(input, " \t\n");
-    *numTokens = 0;
+	char *token = strtok(input, " \t\n");
+	*numTokens = 0;
 
-    while (token != NULL)
-    {
-        tokens[*numTokens] = token;
-        (*numTokens)++;
-        token = strtok(NULL, " \t\n");
-    }
+	while (token != NULL)
+	{
+		tokens[*numTokens] = token;
+		(*numTokens)++;
+		token = strtok(NULL, " \t\n");
+	}
 
-    tokens[*numTokens] = NULL;
+	tokens[*numTokens] = NULL;
 }

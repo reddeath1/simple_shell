@@ -1,8 +1,8 @@
 {
-    "files.associations": {
-        "stat.h": "c",
-        "unistd.h": "c",
-        "shell.h": "c",
-        "string.h": "c"
-    }
+	"files.associations": {
+		"stat.h": "c",
+		"unistd.h": "c",
+		"shell.h": "c",
+		"string.h": "c"
+	}
 }
