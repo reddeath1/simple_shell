@@ -24,17 +24,18 @@ struct Alias
 };
 
 struct Alias aliases[MAX_ALIAS_SIZE];
-int numAliases = 0;
 
 void prompter(void);
+void displayAliases(void);
 void displayAlias(const char *name);
 void setAlias(const char *name, const char *value);
-void changeDirectory(char **tokens);
-void executeCommand(char **tokens);
+void s_chdir(char **tokens);
+void executeCommand(char **tokens,char* executable);
 void tokenizeInput(char *input, char **tokens, int *numTokens);
 void executeAliasCommand(char **tokens);
-int _atoi(char *str);
+int s_atoi(char *str);
 int isExitCommand(char *command);
 ssize_t _getline(char **lineptr, size_t *n);
+size_t s_strlen(const char *str);
 
 #endif /* _SHELL_H_ */
