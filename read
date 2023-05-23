@@ -7,7 +7,7 @@
 // Function to display prompt
 void display_prompt(void)
 {
-    printf("$ ");
+    printf("shell> ");
 }
 
 // Signal handler for SIGINT
