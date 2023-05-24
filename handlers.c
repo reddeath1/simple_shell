@@ -7,7 +7,7 @@
  */
 int isExitCommand(char *command)
 {
-	return strcmp(command, "exit") == 0;
+	return (strcmp(command, "exit") == 0);
 }
 
 /**
@@ -64,8 +64,10 @@ void setAlias(const char *name, const char *value)
 
 	if (numAliases < MAX_ALIAS_SIZE)
 	{
-		strncpy(aliases[numAliases].name, name, sizeof(aliases[numAliases].name) - 1);
-		strncpy(aliases[numAliases].value, value, sizeof(aliases[numAliases].value) - 1);
+		strncpy(aliases[numAliases].name, name,
+				sizeof(aliases[numAliases].name) - 1);
+		strncpy(aliases[numAliases].value, value,
+				sizeof(aliases[numAliases].value) - 1);
 		numAliases++;
 	}
 }
@@ -80,7 +82,6 @@ void executeAliasCommand(char **tokens)
 
 	if (tokens[1] == NULL)
 	{
-		// No arguments provided, display all aliases
 		displayAliases();
 		return;
 	}
@@ -89,9 +90,9 @@ void executeAliasCommand(char **tokens)
 	{
 		if (strchr(tokens[tokenIndex], '=') != NULL)
 		{
-			// Define or update an alias
 			char *name = strtok(tokens[tokenIndex], "=");
 			char *value = strtok(NULL, "=");
+
 			if (name != NULL && value != NULL)
 			{
 				setAlias(name, value);
@@ -103,7 +104,6 @@ void executeAliasCommand(char **tokens)
 		}
 		else
 		{
-			// Display an alias
 			displayAlias(tokens[tokenIndex]);
 		}
 

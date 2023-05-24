@@ -7,30 +7,30 @@
 
 int s_atoi(char *str)
 {
-		int result = 0;
-		int sign = 1;
-		int i = 0;
+	int result = 0;
+	int sign = 1;
+	int i = 0;
 
-		if (str[0] == '-')
+	if (str[0] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+
+	while (str[i] != '\0')
+	{
+		if (str[i] >= '0' && str[i] <= '9')
 		{
-				sign = -1;
-				i++;
+			result = result * 10 + (str[i] - '0');
+			i++;
 		}
-
-		while (str[i] != '\0')
+		else
 		{
-				if (str[i] >= '0' && str[i] <= '9')
-				{
-						result = result * 10 + (str[i] - '0');
-						i++;
-				}
-				else
-				{
-						break;
-				}
+			break;
 		}
+	}
 
-		return result * sign;
+	return (result * sign);
 }
 
 /**
@@ -40,10 +40,11 @@ int s_atoi(char *str)
  */
 size_t s_strlen(const char *str)
 {
-		const char *s = str;
-		while (*s)
-				++s;
-		return s - str;
+	const char *s = str;
+
+	while (*s)
+		++s;
+	return (s - str);
 }
 
 /**
@@ -54,8 +55,6 @@ size_t s_strlen(const char *str)
  */
 ssize_t _getline(char **lineptr, size_t *n)
 {
-
-	// Initialize variables
 	ssize_t read_bytes = 0;
 	size_t buffer_size = 0;
 	char *buffer = NULL, *new_buffer = NULL;
@@ -66,7 +65,7 @@ ssize_t _getline(char **lineptr, size_t *n)
 
 	if (lineptr == NULL || n == NULL)
 	{
-		return -1;
+		return (-1);
 	}
 
 	while ((c = getchar()) != '\n' && c != EOF)
@@ -75,10 +74,11 @@ ssize_t _getline(char **lineptr, size_t *n)
 		{
 			new_size = buffer_size + 1;
 			new_buffer = realloc(buffer, new_size);
+
 			if (new_buffer == NULL)
 			{
 				free(buffer);
-				return -1;
+				return (-1);
 			}
 			buffer = new_buffer;
 			buffer_size = new_size;
@@ -93,19 +93,19 @@ ssize_t _getline(char **lineptr, size_t *n)
 		if (line == NULL)
 		{
 			free(buffer);
-			return -1;
+			return (-1);
 		}
-	   
+
 		for (; i < read_bytes; i++)
 		{
 			line[i] = buffer[i];
 		}
-		line[read_bytes] = '\0'; 
+		line[read_bytes] = '\0';
 		*lineptr = line;
 	}
 	else
 	{
-		*lineptr = NULL; 
+		*lineptr = NULL;
 	}
 
 	*n = buffer_size;
@@ -114,10 +114,10 @@ ssize_t _getline(char **lineptr, size_t *n)
 
 	if (c == EOF)
 	{
-		return -1;
+		return (-1);
 	}
 
-	return read_bytes;
+	return (read_bytes);
 }
 
 /**
@@ -129,6 +129,7 @@ void s_chdir(char **tokens)
 	if (tokens[1] == NULL || strcmp(tokens[1], "~") == 0)
 	{
 		char *homeDir = getenv("HOME");
+
 		if (homeDir == NULL)
 		{
 			fprintf(stderr, "Home directory not found\n");
@@ -143,6 +144,7 @@ void s_chdir(char **tokens)
 	else if (strcmp(tokens[1], "-") == 0)
 	{
 		char *prevDir = getenv("OLDPWD");
+
 		if (prevDir == NULL)
 		{
 			fprintf(stderr, "Previous directory not found\n");

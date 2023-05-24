@@ -11,7 +11,7 @@ int main(int argc, char *argv[], char **env)
 {
 	char *input = NULL;
 	char *tokens[MAX_TOKENS];
-	int numTokens;
+	int numTokens, status;
 	size_t input_size = 0;
 	ssize_t read_bytes;
 	char *executable = NULL;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[], char **env)
 			{
 				if (numTokens > 1)
 				{
-					int status = s_atoi(tokens[1]);
+					status = s_atoi(tokens[1]);
 
 					exit(status);
 				}
@@ -62,17 +62,15 @@ int main(int argc, char *argv[], char **env)
 			}
 			else
 			{
-				executeCommand(tokens, executable);
+				s_exec(tokens, executable);
 			}
 		}
 		free(input);
 		input = NULL;
 		input_size = 0;
 	}
-
 	free(input);
-
-	return 0;
+	return (0);
 }
 
 /**
@@ -86,11 +84,11 @@ void prompter(void)
 }
 
 /**
- * executeCommand - function to execute shell commands
+ * s_exec - function to execute shell commands
  * @tokens: array of command tokens
  * @executable: name of the shell executable
  */
-void executeCommand(char **tokens, char *executable)
+void s_exec(char **tokens, char *executable)
 {
 	pid_t pid = fork();
 	char cwd[4096];
@@ -102,7 +100,6 @@ void executeCommand(char **tokens, char *executable)
 	}
 	else if (pid == 0)
 	{
-		// Child process
 		if (execvp(tokens[0], tokens) == -1)
 		{
 
@@ -117,7 +114,6 @@ void executeCommand(char **tokens, char *executable)
 	}
 	else
 	{
-		// Parent process
 		wait(NULL);
 	}
 }

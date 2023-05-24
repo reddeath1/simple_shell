@@ -30,7 +30,7 @@ void displayAliases(void);
 void displayAlias(const char *name);
 void setAlias(const char *name, const char *value);
 void s_chdir(char **tokens);
-void executeCommand(char **tokens,char* executable);
+void s_exec(char **tokens,char* executable);
 void tokenizeInput(char *input, char **tokens, int *numTokens);
 void executeAliasCommand(char **tokens);
 int s_atoi(char *str);
