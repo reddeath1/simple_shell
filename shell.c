@@ -4,10 +4,9 @@
  * main - Main function
  * @argc: Number of command-line arguments
  * @argv: Array of command-line arguments
- * @env: Array of environment variables
  * Return: Always 0
  */
-int main(int argc, char *argv[], char **env)
+int main(int argc, char *argv[])
 {
 	char *input = NULL;
 	char *tokens[MAX_TOKENS];
