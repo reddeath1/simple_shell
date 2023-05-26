@@ -11,9 +11,9 @@ int main(int argc, char *argv[], char **env)
 {
 	char *input = NULL;
 	char **tokens = NULL;
-	// int numTokens = 0;
+	int numTokens = 0;
 	int counts = 0;
-	// int status = 0;
+	int status = 0;
 	size_t input_size = 0;
 	ssize_t read_bytes;
 	(void)argc;
@@ -23,7 +23,7 @@ int main(int argc, char *argv[], char **env)
 		counts++;
 		prompter();
 		signal(SIGINT, signal_handler);
-		read_bytes = getline(&input, &input_size, stdin);
+		read_bytes = sgetline(&input, &input_size);
 		
 		if (read_bytes == -1)
 		{
@@ -32,42 +32,42 @@ int main(int argc, char *argv[], char **env)
 
 		run(tokens, argv[0], env, counts);
 
-		// if (read_bytes == EOF)
-		// {
-		// 	EndOfFile(input);
-		// }
-		// if (*input == '\n')
-		// 	free(input);
-		// else
-		// {
-		// 	input[strcspn(input, "\n")] = '\0';
-		// 	tokens = tokenizeInput(input, " \0");
-		// 	free(input);
+		if (read_bytes == EOF)
+		{
+			EndOfFile(input);
+		}
+		if (*input == '\n')
+			free(input);
+		else
+		{
+			input[strcspn(input, "\n")] = '\0';
+			tokens = tokenizeInput(input, " \0");
+			free(input);
 
-		// 	if (numTokens == -1)
-		// 		break;
+			if (numTokens == -1)
+				break;
 
-		// 	if (str_compare(tokens[0], "env") != 0)
-		// 		display_env(env);
-		// 	else if (isExitCommand(tokens[0]))
-		// 	{
-		// 		if (numTokens > 1)
-		// 		{
-		// 			status = s_atoi(tokens[1]);
+			if (str_compare(tokens[0], "env") != 0)
+				display_env(env);
+			else if (isExitCommand(tokens[0]))
+			{
+				if (numTokens > 1)
+				{
+					status = s_atoi(tokens[1]);
 
-		// 			exit(status);
-		// 		}
-		// 		else
-		// 		{
-		// 			free(input);
-		// 			exit(EXIT_SUCCESS);
-		// 		}
-		// 	}
-		// 	else if (str_compare(tokens[0], "cd") != 0)
-		// 		s_chdir(tokens);
-		// 	else
-		// 		run(tokens, argv[0], env, counts);
-		// }
+					exit(status);
+				}
+				else
+				{
+					free(input);
+					exit(EXIT_SUCCESS);
+				}
+			}
+			else if (str_compare(tokens[0], "cd") != 0)
+				s_chdir(tokens);
+			else
+				run(tokens, argv[0], env, counts);
+		}
 		fflush(stdin);
 		input = NULL;
 		input_size = 0;
@@ -119,17 +119,17 @@ char **tokenizeInput(char *input, const char *delimiters)
 	{
 		perror("Unable to allocate memory!");
 		free(input);
-		freexit(tokens);
+		freemem(tokens);
 		exit(EXIT_FAILURE);
 	}
 
 	token = strtok(input, delimiters);
 	while (token != NULL)
 	{
-		tokens[i] = malloc(strlength(token) + 1);
+		tokens[i] = malloc(s_strlen(token) + 1);
 		if (tokens[i] == NULL)
 		{
-			perror("Unable to allocate memory!!!");
+			perror("Unable to allocate memory!!");
 			freemem(tokens);
 			return (NULL);
 		}
