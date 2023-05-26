@@ -4,72 +4,88 @@
  * main - Main function
  * @argc: Number of command-line arguments
  * @argv: Array of command-line arguments
+ * @env: Environmental variables
  * Return: Always 0
  */
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **env)
 {
 	char *input = NULL;
-	char *tokens[MAX_TOKENS];
-	int numTokens, status;
+	char **tokens = NULL;
+	// int numTokens = 0;
+	int counts = 0;
+	// int status = 0;
 	size_t input_size = 0;
 	ssize_t read_bytes;
-	char *executable = NULL;
-
-	if (argc > 0)
-	{
-		executable = argv[0];
-	}
+	(void)argc;
 
 	while (1)
 	{
+		counts++;
 		prompter();
-
-		read_bytes = _getline(&input, &input_size);
-
+		signal(SIGINT, signal_handler);
+		read_bytes = getline(&input, &input_size, stdin);
+		
 		if (read_bytes == -1)
 		{
 			break;
 		}
 
-		input[strcspn(input, "\n")] = '\0';
+		run(tokens, argv[0], env, counts);
 
-		tokenizeInput(input, tokens, &numTokens);
+		// if (read_bytes == EOF)
+		// {
+		// 	EndOfFile(input);
+		// }
+		// if (*input == '\n')
+		// 	free(input);
+		// else
+		// {
+		// 	input[strcspn(input, "\n")] = '\0';
+		// 	tokens = tokenizeInput(input, " \0");
+		// 	free(input);
 
-		if (numTokens > 0)
-		{
-			if (strcmp(tokens[0], "alias") == 0)
-			{
-				executeAliasCommand(tokens);
-			}
-			else if (strcmp(tokens[0], "cd") == 0)
-			{
-				s_chdir(tokens);
-			}
-			else if (isExitCommand(tokens[0]))
-			{
-				if (numTokens > 1)
-				{
-					status = s_atoi(tokens[1]);
+		// 	if (numTokens == -1)
+		// 		break;
 
-					exit(status);
-				}
-				else
-				{
-					free(input);
-					exit(EXIT_SUCCESS);
-				}
-			}
-			else
-			{
-				s_exec(tokens, executable);
-			}
-		}
-		free(input);
+		// 	if (str_compare(tokens[0], "env") != 0)
+		// 		display_env(env);
+		// 	else if (isExitCommand(tokens[0]))
+		// 	{
+		// 		if (numTokens > 1)
+		// 		{
+		// 			status = s_atoi(tokens[1]);
+
+		// 			exit(status);
+		// 		}
+		// 		else
+		// 		{
+		// 			free(input);
+		// 			exit(EXIT_SUCCESS);
+		// 		}
+		// 	}
+		// 	else if (str_compare(tokens[0], "cd") != 0)
+		// 		s_chdir(tokens);
+		// 	else
+		// 		run(tokens, argv[0], env, counts);
+		// }
+		fflush(stdin);
 		input = NULL;
 		input_size = 0;
 	}
-	free(input);
-	return (0);
+
+	return (EXIT_SUCCESS);
+}
+
+/**
+ * signal_handler - Signal handler for interrupt signals
+ * @signals: Signal number
+ * Description: This function handles interrupt signals and prints a prompt
+ * for the shell.
+ */
+void signal_handler(int signals)
+{
+	(void)signals;
+	write(STDOUT_FILENO, "\nShell>> ", 14);
 }
 
 /**
@@ -78,62 +94,49 @@ int main(int argc, char *argv[])
  */
 void prompter(void)
 {
-	printf("Shell> ");
-	fflush(stdout);
+	write(STDOUT_FILENO, "Shell>> ", 500);
 }
 
 /**
- * s_exec - function to execute shell commands
- * @tokens: array of command tokens
- * @executable: name of the shell executable
+ * tokenizeInput - Function to tokenize input string
+ * @input: Input string
+ * @delimiters: Delimiters used for tokenization
+ * Return: Array of tokens
  */
-void s_exec(char **tokens, char *executable)
+
+char **tokenizeInput(char *input, const char *delimiters)
 {
-	pid_t pid = fork();
-	char cwd[4096];
+	char *token = NULL, **tokens = NULL;
+	size_t input_size = 0;
+	int i = 0;
 
-	if (pid < 0)
+	if (input == NULL)
+		return (NULL);
+
+	input_size = strlength(input);
+	tokens = malloc((input_size + 1) * sizeof(char *));
+	if (tokens == NULL)
 	{
-		fprintf(stderr, "Fork failed\n");
-		exit(1);
+		perror("Unable to allocate memory!");
+		free(input);
+		freexit(tokens);
+		exit(EXIT_FAILURE);
 	}
-	else if (pid == 0)
-	{
-		if (execvp(tokens[0], tokens) == -1)
-		{
 
-			if (getcwd(cwd, sizeof(cwd)) != NULL)
-			{
-				fprintf(stderr, "%s: No such file or directory\n", executable);
-				exit(1);
-			}
-			fprintf(stderr, "%s: No such file or directory\n", tokens[0]);
-			exit(1);
-		}
-	}
-	else
-	{
-		wait(NULL);
-	}
-}
-
-/**
- * tokenizeInput - function to tokenize input string
- * @input: input string
- * @tokens: array to store tokens
- * @numTokens: pointer to store the number of tokens
- */
-void tokenizeInput(char *input, char **tokens, int *numTokens)
-{
-	char *token = strtok(input, " \t\n");
-	*numTokens = 0;
-
+	token = strtok(input, delimiters);
 	while (token != NULL)
 	{
-		tokens[*numTokens] = token;
-		(*numTokens)++;
-		token = strtok(NULL, " \t\n");
+		tokens[i] = malloc(strlength(token) + 1);
+		if (tokens[i] == NULL)
+		{
+			perror("Unable to allocate memory!!!");
+			freemem(tokens);
+			return (NULL);
+		}
+		strcopy(tokens[i], token);
+		token = strtok(NULL, delimiters);
+		i++;
 	}
-
-	tokens[*numTokens] = NULL;
+	tokens[i] = NULL;
+	return (tokens);
 }

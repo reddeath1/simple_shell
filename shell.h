@@ -9,33 +9,25 @@
 #include <sys/types.h>
 #include <stdarg.h> 
 
-#define MAX_INPUT_SIZE 1024
-#define MAX_TOKEN_SIZE 50
-#define MAX_TOKENS 100
-#define MAX_ALIAS_SIZE 100
-#define MAX_ALIAS_NAME_SIZE 50
-#define MAX_ALIAS_VALUE_SIZE 50
-#define MAX_COMMAND_LENGTH 100
-
-struct Alias
-{
-	char name[MAX_ALIAS_NAME_SIZE];
-	char value[MAX_ALIAS_VALUE_SIZE];
-};
-
-struct Alias aliases[MAX_ALIAS_SIZE];
-
 void prompter(void);
-void displayAliases(void);
-void displayAlias(const char *name);
-void setAlias(const char *name, const char *value);
-void s_chdir(char **tokens);
-void s_exec(char **tokens,char* executable);
-void tokenizeInput(char *input, char **tokens, int *numTokens);
-void executeAliasCommand(char **tokens);
+void run(char **tokens, char *input, char **env, int counts);
+void exec(char **tokens, char *input, char **env, int counts);
+int s_chdir(char **tokens);
+char **tokenizeInput(char *buffer, const char *s);
 int s_atoi(char *str);
 int isExitCommand(char *command);
-ssize_t _getline(char **lineptr, size_t *n);
-size_t s_strlen(const char *str);
+ssize_t sgetline(char **lineptr, size_t *n);
+size_t strlength(const char *str);
+void freemem(char **tokens);
+char *strcopy(char *dest, char *src);
+void EndOfFile(char *input);
+void _write(int fn, const void * buf, size_t byte);
+int str_compare(const char *str1, const char *str2);
+void signal_handler(int signals);
+void freexit(char **tokens);
+void print_error(char *name, int counts, char **tokens);
+void display_env(char **env);
+char **get_PATH(char **env);
+char *str_concat(char *destination, const char *source);
 
 #endif /* _SHELL_H_ */

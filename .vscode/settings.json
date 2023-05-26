@@ -3,6 +3,8 @@
 		"stat.h": "c",
 		"unistd.h": "c",
 		"shell.h": "c",
-		"string.h": "c"
+		"string.h": "c",
+		"types.h": "c",
+		"read": "c"
 	}
 }

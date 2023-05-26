@@ -7,106 +7,89 @@
  */
 int isExitCommand(char *command)
 {
-	return (strcmp(command, "exit") == 0);
+	return (str_compare(command, "exit") == 0);
 }
 
 /**
- * displayAliases - Display all aliases
- */
-void displayAliases(void)
+ * EndOfFile - Handle end of file condition
+ * @input: Pointer to the input buffer
+ * Description: Frees the input buffer and exits the program.
+ * If the standard input is a terminal, a newline character is written before exiting.
+ * */
+void EndOfFile(char *input)
 {
-	int i = 0;
-	int numAliases = 0;
-
-	for (; i < numAliases; i++)
+	if (input)
 	{
-		printf("%s='%s'\n", aliases[i].name, aliases[i].value);
+		free(input);
+		input = NULL;
 	}
+
+	if (isatty(STDIN_FILENO))
+		_write(STDOUT_FILENO, "\n", 1);
+	free(input);
+	exit(EXIT_SUCCESS);
 }
 
 /**
- * displayAlias - Display a specific alias
- * @name: Name of the alias to display
+ * _write - Wrapper function for the write system call
+ * @fn: File descriptor
+ * @buf: Pointer to the data buffer
+ * @byte: Number of bytes to write
  */
-void displayAlias(const char *name)
+void _write(int fn, const void *buf, size_t byte)
 {
-	int i = 0;
-	int numAliases = 0;
-
-	for (; i < numAliases; i++)
-	{
-		if (strcmp(aliases[i].name, name) == 0)
-		{
-			printf("%s='%s'\n", aliases[i].name, aliases[i].value);
-			return;
-		}
-	}
+	write(fn, buf, byte);
 }
 
 /**
- * setAlias - Set or update an alias
- * @name: Name of the alias
- * @value: Value of the alias
+ * Custom implementation of strcmp function.
+ * Compares two strings lexicographically.
+ * Returns an integer less than, equal to, or greater than zero
+ * if str1 is found to be less than, equal to, or greater than str2, respectively.
+ *
+ * @param str1 The first string to compare.
+ * @param str2 The second string to compare.
+ * @return Integer value indicating the comparison result.
  */
-void setAlias(const char *name, const char *value)
+int str_compare(const char *str1, const char *str2)
 {
-	int i = 0;
-	int numAliases = 0;
-
-	for (; i < numAliases; i++)
+	while (*str1 && (*str1 == *str2))
 	{
-		if (strcmp(aliases[i].name, name) == 0)
-		{
-			strncpy(aliases[i].value, value, sizeof(aliases[i].value) - 1);
-			return;
-		}
+		str1++;
+		str2++;
 	}
-
-	if (numAliases < MAX_ALIAS_SIZE)
-	{
-		strncpy(aliases[numAliases].name, name,
-				sizeof(aliases[numAliases].name) - 1);
-		strncpy(aliases[numAliases].value, value,
-				sizeof(aliases[numAliases].value) - 1);
-		numAliases++;
-	}
+	return *(unsigned char *)str1 - *(unsigned char *)str2;
 }
 
 /**
- * executeAliasCommand - Execute the alias command
- * @tokens: Array of tokens
+ * run - Function to create a child process and execute a command
+ * @tokens: Array of command tokens
+ * @input: Name of the shell executable
+ * @env: Array of environment variables
+ * @counts: Number of command cycles
  */
-void executeAliasCommand(char **tokens)
+void run(char **tokens, char *input, char **env, int counts)
 {
-	int tokenIndex = 1;
+	int pid, stats;
 
-	if (tokens[1] == NULL)
+	pid = fork();
+	if (pid < 0)
 	{
-		displayAliases();
-		return;
+		perror("Error: ");
+		freexit(tokens);
 	}
-
-	while (tokens[tokenIndex] != NULL)
+	else if (pid == 0)
 	{
-		if (strchr(tokens[tokenIndex], '=') != NULL)
+		exec(tokens, input, env, counts);
+		freemem(tokens);
+	}
+	else
+	{
+		
+		if (waitpid(pid, &stats, 0) == -1)
 		{
-			char *name = strtok(tokens[tokenIndex], "=");
-			char *value = strtok(NULL, "=");
-
-			if (name != NULL && value != NULL)
-			{
-				setAlias(name, value);
-			}
-			else
-			{
-				fprintf(stderr, "%s: Invalid alias format\n", tokens[tokenIndex]);
-			}
+			freexit(tokens);
 		}
-		else
-		{
-			displayAlias(tokens[tokenIndex]);
-		}
-
-		tokenIndex++;
+		freemem(tokens);
 	}
 }

@@ -38,7 +38,7 @@ int s_atoi(char *str)
  * @str: Input string
  * Return: Length of the string
  */
-size_t s_strlen(const char *str)
+size_t strlength(const char *str)
 {
 	const char *s = str;
 
@@ -53,7 +53,7 @@ size_t s_strlen(const char *str)
  * @n: Pointer to store the allocated size
  * Return: Number of bytes read or -1 on failure
  */
-ssize_t _getline(char **lineptr, size_t *n)
+ssize_t sgetline(char **lineptr, size_t *n)
 {
 	ssize_t read_bytes = 0;
 	size_t buffer_size = 0;
@@ -100,6 +100,7 @@ ssize_t _getline(char **lineptr, size_t *n)
 		{
 			line[i] = buffer[i];
 		}
+
 		line[read_bytes] = '\0';
 		*lineptr = line;
 	}
@@ -123,48 +124,30 @@ ssize_t _getline(char **lineptr, size_t *n)
 /**
  * s_chdir - Change directory
  * @tokens: Array of tokens
+ * Return: Always 1 or 0
  */
-void s_chdir(char **tokens)
+int s_chdir(char **tokens)
 {
-	if (tokens[1] == NULL || strcmp(tokens[1], "~") == 0)
+	char *buf = NULL;
+	size_t size = 1024;
+
+	if (tokens == NULL)
+		tokens[1] = getcwd(buf, size);
+
+	if (chdir(tokens[1]) == -1)
 	{
-		char *homeDir = getenv("HOME");
-
-		if (homeDir == NULL)
-		{
-			fprintf(stderr, "Home directory not found\n");
-			return;
-		}
-
-		if (chdir(homeDir) != 0)
-		{
-			fprintf(stderr, "%s: No such file or directory\n", homeDir);
-		}
+		perror(tokens[1]);
+		return (98);
 	}
-	else if (strcmp(tokens[1], "-") == 0)
-	{
-		char *prevDir = getenv("OLDPWD");
+	return (1);
+}
 
-		if (prevDir == NULL)
-		{
-			fprintf(stderr, "Previous directory not found\n");
-			return;
-		}
+char *strcopy(char *dest, char *src)
+{
+	char *aux = dest;
 
-		if (chdir(prevDir) != 0)
-		{
-			fprintf(stderr, "%s: No such file or directory\n", prevDir);
-		}
-		else
-		{
-			printf("%s\n", prevDir);
-		}
-	}
-	else
-	{
-		if (chdir(tokens[1]) != 0)
-		{
-			fprintf(stderr, "%s: No such file or directory\n", tokens[1]);
-		}
-	}
+	while (*src)
+		*dest++ = *src++;
+	*dest = '\0';
+	return (aux);
 }
