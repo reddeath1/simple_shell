@@ -14,13 +14,13 @@ char *get_history_file(details *d)
 	dir = _getenv(d, "HOME=");
 	if (!dir)
 		return (NULL);
-	buf = malloc(sizeof(char) * (_strlen(dir) + _strlen(HIST_FILE) + 2));
+	buf = malloc(sizeof(char) * (_strlen(dir) + _strlen(HISTORY_FILE) + 2));
 	if (!buf)
 		return (NULL);
 	buf[0] = 0;
 	_strcpy(buf, dir);
 	_strcat(buf, "/");
-	_strcat(buf, HIST_FILE);
+	_strcat(buf, HISTORY_FILE);
 	return (buf);
 }
 
@@ -48,7 +48,7 @@ int write_history(details *d)
 		_putsfd(node->str, fd);
 		_putfd('\n', fd);
 	}
-	_putfd(BUF_FLUSH, fd);
+	_putfd(FLUSH_BUFFER, fd);
 	close(fd);
 	return (1);
 }
@@ -96,7 +96,7 @@ int read_history(details *d)
 		build_history_list(d, buf + last, linecount++);
 	free(buf);
 	d->histcount = linecount;
-	while (d->histcount-- >= HIST_MAX)
+	while (d->histcount-- >= HISTORY_MAX)
 		delete_node_at_index(&(d->history), 0);
 	renumber_history(d);
 	return (d->histcount);

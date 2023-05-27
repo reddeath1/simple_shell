@@ -69,14 +69,14 @@ void _puts(char *s)
 int _putchar(char cha)
 {
 	static int i;
-	static char buf[WRITE_BUF_SIZE];
+	static char buf[INPUT_WRITE_BUF_SIZE];
 
-	if (cha == BUF_FLUSH || i >= WRITE_BUF_SIZE)
+	if (cha == FLUSH_BUFFER || i >= INPUT_WRITE_BUF_SIZE)
 	{
 		write(1, buf, i);
 		i = 0;
 	}
-	if (cha != BUF_FLUSH)
+	if (cha != FLUSH_BUFFER)
 		buf[i++] = cha;
 	return (1);
 }

@@ -12,23 +12,18 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#define READ_BUF_SIZE 1024
-#define WRITE_BUF_SIZE 1024
-#define BUF_FLUSH -1
-#define CMD_NORM	0
-#define CMD_OR		1
-#define CMD_AND		2
-#define CMD_CHAIN	3
-#define CONVERT_LOWERCASE	1
-#define CONVERT_UNSIGNED	2
-#define USE_GETLINE 0
-#define USE_STRTOK 0
-
-#define HIST_FILE	".simple_shell_history"
-#define HIST_MAX	4096
-
+#define INPUT_READ_BUF_SIZE 1024
+#define INPUT_WRITE_BUF_SIZE 1024
+#define FLUSH_BUFFER -1
+#define COMMAND_NORM	0
+#define COMMAND_OR		1
+#define COMMAND_AND		2
+#define COMMAND_CHAIN	3
+#define TO_LOWERCASE	1
+#define TO_UNSIGNED	2
 extern char **environ;
-
+#define HISTORY_FILE	".history"
+#define HISTORY_MAX	4096
 
 /**
  * struct liststr - singly linked list
@@ -156,7 +151,7 @@ int myalias(details *);
 
 ssize_t _input(details *);
 int _getline(details *, char **, size_t *);
-void sigintHandler(int);
+void Signals(int s);
 void clearinfo(details *);
 void setinfo(details *, char **);
 void freeinfo(details *, int);

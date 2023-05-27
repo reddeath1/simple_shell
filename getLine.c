@@ -16,7 +16,7 @@ ssize_t input_buf(details *d, char **buf, size_t *len)
 	{
 		free(*buf);
 		*buf = NULL;
-		signal(SIGINT, sigintHandler);
+		signal(SIGINT, Signals);
 #if USE_GETLINE
 		r = getline(buf, &len_p, stdin);
 #else
@@ -54,7 +54,7 @@ ssize_t _input(details *d)
 	ssize_t r = 0;
 	char **buf_p = &(d->arg), *p;
 
-	_putchar(BUF_FLUSH);
+	_putchar(FLUSH_BUFFER);
 	r = input_buf(d, &buf, &len);
 	if (r == -1)
 		return (-1);
@@ -75,7 +75,7 @@ ssize_t _input(details *d)
 		if (i >= len)
 		{
 			i = len = 0;
-			d->cmd_buf_type = CMD_NORM;
+			d->cmd_buf_type = COMMAND_NORM;
 		}
 
 		*buf_p = p;
@@ -100,7 +100,7 @@ ssize_t read_buf(details *d, char *buf, size_t *i)
 
 	if (*i)
 		return (0);
-	r = read(d->rfd, buf, READ_BUF_SIZE);
+	r = read(d->rfd, buf, INPUT_READ_BUF_SIZE);
 	if (r >= 0)
 		*i = r;
 	return (r);
@@ -116,7 +116,7 @@ ssize_t read_buf(details *d, char *buf, size_t *i)
  */
 int _getline(details *d, char **ptr, size_t *length)
 {
-	static char buf[READ_BUF_SIZE];
+	static char buf[INPUT_READ_BUF_SIZE];
 	static size_t i, len;
 	size_t k;
 	ssize_t r = 0, s = 0;
@@ -154,13 +154,13 @@ int _getline(details *d, char **ptr, size_t *length)
 }
 
 /**
- * sigintHandler - the blocks ctrl-C
- * @sig: signal number
- * Return: void
+ * Signals - blocks for ctrl-C
+ * @sig: number
+ * Return: (void)
  */
-void sigintHandler(__attribute__((unused))int sig)
+void Signals(__attribute__((unused))int sig)
 {
 	_puts("\n");
 	_puts("$ ");
-	_putchar(BUF_FLUSH);
+	_putchar(FLUSH_BUFFER);
 }

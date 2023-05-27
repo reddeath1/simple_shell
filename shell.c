@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 				error_put(": 0: Can not open ");
 				error_put(argv[1]);
 				error_putchar('\n');
-				error_putchar(BUF_FLUSH);
+				error_putchar(FLUSH_BUFFER);
 				exit(127);
 			}
 			return (EXIT_FAILURE);

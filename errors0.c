@@ -98,13 +98,13 @@ char *cn(long int nu, int _base, int flags)
 	char *ptr;
 	unsigned long n = nu;
 
-	if (!(flags & CONVERT_UNSIGNED) && nu < 0)
+	if (!(flags & TO_UNSIGNED) && nu < 0)
 	{
 		n = -nu;
 		sign = '-';
 
 	}
-	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	array = flags & TO_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
 	ptr = &buffer[49];
 	*ptr = '\0';
 

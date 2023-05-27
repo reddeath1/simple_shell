@@ -69,6 +69,6 @@ void freeinfo(details *d, int a)
 		pointer_free((void **)d->cmd_buf);
 		if (d->rfd > 2)
 			close(d->rfd);
-		_putchar(BUF_FLUSH);
+		_putchar(FLUSH_BUFFER);
 	}
 }

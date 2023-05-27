@@ -27,14 +27,14 @@ void error_put(char *str)
 int error_putchar(char c)
 {
 	static int i;
-	static char buf[WRITE_BUF_SIZE];
+	static char buf[INPUT_WRITE_BUF_SIZE];
 
-	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
+	if (c == FLUSH_BUFFER || i >= INPUT_WRITE_BUF_SIZE)
 	{
 		write(2, buf, i);
 		i = 0;
 	}
-	if (c != BUF_FLUSH)
+	if (c != FLUSH_BUFFER)
 		buf[i++] = c;
 	return (1);
 }
@@ -50,14 +50,14 @@ int error_putchar(char c)
 int _putfd(char c, int fd)
 {
 	static int i;
-	static char buf[WRITE_BUF_SIZE];
+	static char buf[INPUT_WRITE_BUF_SIZE];
 
-	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
+	if (c == FLUSH_BUFFER || i >= INPUT_WRITE_BUF_SIZE)
 	{
 		write(fd, buf, i);
 		i = 0;
 	}
-	if (c != BUF_FLUSH)
+	if (c != FLUSH_BUFFER)
 		buf[i++] = c;
 	return (1);
 }

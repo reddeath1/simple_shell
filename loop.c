@@ -16,7 +16,7 @@ int hsh_loop(details *d, char **av)
 		clearinfo(d);
 		if (interact(d))
 			_puts("$ ");
-		error_putchar(BUF_FLUSH);
+		error_putchar(FLUSH_BUFFER);
 		r = _input(d);
 		if (r != -1)
 		{
