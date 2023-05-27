@@ -2,7 +2,7 @@
 
 /**
  * get_environ - function that returns the string array copy of our environ
- * @info: Structure containing arguments.
+ * @d: Structure containing arguments.
  * Return: Always 0
  */
 char **get_environ(details *d)

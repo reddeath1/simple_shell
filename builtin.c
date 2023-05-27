@@ -88,6 +88,6 @@ int myhelp(details *d)
 	arg_array = d->argv;
 	_puts("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*arg_array); 
+		_puts(*arg_array);
 	return (0);
 }

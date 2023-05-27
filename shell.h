@@ -39,7 +39,7 @@ typedef struct liststr
 } list_t;
 
 /**
- * @brief Structure representing program details
+ * struct detail - Structure representing program details
  * @arg: Argument string
  * @argv: Array of argument strings
  * @path: Path string
@@ -86,7 +86,7 @@ typedef struct detail
 	0, 0, 0}
 
 /**
- * builtin - representing a built-in command.
+ * struct builtin - Structure representing a built-in command.
  * @type: Command type (name)
  * @func: Pointer to the function that implements the command
  */

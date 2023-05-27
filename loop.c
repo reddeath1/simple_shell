@@ -123,9 +123,10 @@ void fork_cmd(details *d)
 	pid_t child_pid;
 
 	child_pid = fork();
+
 	if (child_pid == -1)
 	{
-		perrors(d,"Error:");
+		perrors(d, "Error:");
 		return;
 	}
 	if (child_pid == 0)

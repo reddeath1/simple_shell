@@ -1,11 +1,12 @@
 #include "shell.h"
 
 /**
- * is_chain -function that checks if current char in buffer is a chain delimeter
- * @d: the parameter struct
- * @buf: the char buffer
- * @p: address of current position in buf
- * Return: 1 if chain delimeter, 0 otherwise
+ * is_chain -function that checks
+ * if current char in buffer is a chain delimeter
+ * @d: parameter struct
+ * @buf: char buffer
+ * @p: address of a current position in buf
+ * Return: (1 if chain delimeter, 0 otherwise)
  */
 int is_chain(details *d, char *buf, size_t *p)
 {
@@ -35,13 +36,13 @@ int is_chain(details *d, char *buf, size_t *p)
 }
 
 /**
- * check_chain - checks we should continue chaining based on last status
- * @d: the parameter struct
- * @buf: the char buffer
+ * check_chain -function that  checks either
+ * to ontinue chaining based on last status
+ * @d: parameter struct
+ * @buf: char buffer
  * @p: address of current position in buf
  * @i: starting position in buf
  * @len: length of buf
- *
  * Return: Void
  */
 void check_chain(details *d, char *buf, size_t *p, size_t i, size_t len)
@@ -69,10 +70,9 @@ void check_chain(details *d, char *buf, size_t *p, size_t i, size_t len)
 }
 
 /**
- * replace_alias - replaces an aliases in the tokenized string
+ * replace_alias - functions that replaces an aliases in the tokenized string
  * @d: the parameter struct
- *
- * Return: 1 if replaced, 0 otherwise
+ * Return: (1 if replaced, 0 )
  */
 int replace_alias(details *d)
 {
@@ -98,10 +98,9 @@ int replace_alias(details *d)
 }
 
 /**
- * replace_vars - replaces vars in the tokenized string
- * @info: the parameter struct
- *
- * Return: 1 if replaced, 0 otherwise
+ * replace_vars - function that replaces vars in the tokenized string
+ * @d: parameter struct
+ * Return: (1 if replaced, 0)
  */
 int replace_vars(details *d)
 {

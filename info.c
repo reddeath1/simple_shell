@@ -13,7 +13,7 @@ void clearinfo(details *d)
 }
 
 /**
- * setinfo - function to initializes struct details 
+ * setinfo - function to initializes struct details
  * @d: struct address
  * @av: argument vector
  */
@@ -46,7 +46,7 @@ void setinfo(details *d, char **av)
 
 /**
  * freeinfo - function to free details struct fields
- * @info: struct address
+ * @d: struct address
  * @a: freeing all fields
  */
 void freeinfo(details *d, int a)

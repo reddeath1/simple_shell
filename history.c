@@ -1,10 +1,9 @@
 #include "shell.h"
 
 /**
- * get_history_file - gets the history file
+ * get_history_file - function that gets the history file
  * @d: parameter struct
- *
- * Return: allocated string containg history file
+ * Return: (allocated string containg history file)
  */
 
 char *get_history_file(details *d)
@@ -25,10 +24,9 @@ char *get_history_file(details *d)
 }
 
 /**
- * write_history - creates a file, or appends to an existing file
+ * write_history - function that creates a file, or appends to an existing file
  * @d: the parameter struct
- *
- * Return: 1 on success, else -1
+ * Return:( 1 on success, else -1)
  */
 int write_history(details *d)
 {
@@ -54,10 +52,9 @@ int write_history(details *d)
 }
 
 /**
- * read_history - reads history from file
- * @d: the parameter struct
- *
- * Return: histcount on success, 0 otherwise
+ * read_history - function that reads history from file
+ * @d: parameter struct
+ * Return: (count on success, 0 otherwise)
  */
 int read_history(details *d)
 {
@@ -103,20 +100,21 @@ int read_history(details *d)
 }
 
 /**
- * build_history_list - adds entry to a history linked list
- * @info: Structure containing potential arguments. Used to maintain
+ * build_history_list -function that
+ * adds entry to history linked
+ * list
+ * @d: structure containing arguments.
  * @buf: buffer
- * @linecount: the history linecount, histcount
- *
- * Return: Always 0
+ * @count: history line count, hist count
+ * Return: (Always 0)
  */
-int build_history_list(details *d, char *buf, int linecount)
+int build_history_list(details *d, char *buf, int count)
 {
 	list_t *node = NULL;
 
 	if (d->history)
 		node = d->history;
-	add_node_end(&node, buf, linecount);
+	add_node_end(&node, buf, count);
 
 	if (!d->history)
 		d->history = node;
@@ -124,10 +122,10 @@ int build_history_list(details *d, char *buf, int linecount)
 }
 
 /**
- * renumber_history - renumbers the history linked list after changes
- * @info: Structure containing potential arguments. Used to maintain
- *
- * Return: the new histcount
+ * renumber_history - function that renumbers
+ * the history linked list after the changes
+ * @d: structure containing arguments.
+ * Return: (histcount)
  */
 int renumber_history(details *d)
 {

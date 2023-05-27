@@ -83,15 +83,14 @@ ssize_t _input(details *d)
 	}
 
 	*buf_p = buf;
-	return (r); 
+	return (r);
 }
 
 /**
  * read_buf - reads a buffer
- * @info: parameter struct
+ * @d: parameter struct
  * @buf: buffer
  * @i: size
- *
  * Return: r
  */
 ssize_t read_buf(details *d, char *buf, size_t *i)
@@ -108,10 +107,9 @@ ssize_t read_buf(details *d, char *buf, size_t *i)
 
 /**
  * _getline - function that gets the next line of input from STDIN
- * @details: parameter struct
+ * @d: parameter struct
  * @ptr: address of pointer to buffer, preallocated or NULL
  * @length: size of preallocated ptr buffer if not NULL
- *
  * Return: s
  */
 int _getline(details *d, char **ptr, size_t *length)

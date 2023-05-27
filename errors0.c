@@ -29,7 +29,7 @@ int err_atoi(char *str)
 }
 
 /**
- * perror - function that print an error message
+ * perrors - function that print an error message
  * @p: a parameter & return info struct
  * @er: a string containing specified error type
  * Return: (0 if no numbers in string, converted number -1 on error)
@@ -86,9 +86,9 @@ int display_decimal(int input, int fd)
 /**
  * cn - A converter function
  * @nu: number
- * @base: base
+ * @_base: base
  * @flags: argument flags
- * Return: string
+ * Return:( string)
  */
 char *cn(long int nu, int _base, int flags)
 {
@@ -121,7 +121,6 @@ char *cn(long int nu, int _base, int flags)
 /**
  * rm_comments - function that replaces first instance of '#' with '\0'
  * @input: address of the string to modify
- *
  * Return: Always 0;
  */
 void rm_comments(char *input)
