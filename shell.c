@@ -8,7 +8,7 @@
  */
 int main(int argc, char *argv[])
 {
-	details inf[] = { INFO_INIT };
+	details inf[] = { INFO };
 	int d = 2;
 
 	if (argc > 1)

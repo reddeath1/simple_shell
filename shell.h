@@ -24,6 +24,9 @@
 extern char **environ;
 #define HISTORY_FILE	".history"
 #define HISTORY_MAX	4096
+#define INFO \
+{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
+	0, 0, 0}
 
 /**
  * struct liststr - singly linked list
@@ -80,10 +83,6 @@ typedef struct detail
 	int cmd_buf_type;
 	int histcount;
 } details;
-
-#define INFO_INIT \
-{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-	0, 0, 0}
 
 /**
  * struct builtin - Structure representing a built-in command.
