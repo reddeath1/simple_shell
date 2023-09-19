@@ -3,7 +3,7 @@
 /**
  * myhistory - funtion displays the history list
  * @d: Structure containing  arguments.
- *  Return: Always 0
+ * Return: Always 0
  */
 int myhistory(details *d)
 {
@@ -77,7 +77,7 @@ int print_alias(list_t *node)
 
 /**
  * myalias - function that mimics the alias builtin (man alias)
- * @info: Structure containing arguments.
+ * @d: Structure containing arguments.
  *  Return: Always 0
  */
 int myalias(details *d)
